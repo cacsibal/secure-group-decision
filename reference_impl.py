@@ -206,9 +206,9 @@ class GroupMember:
         r = AdditivePoly([self.__r.randrange(1, Q) for _ in range(degree + 1)])
         c_poly = pow(G, f) * pow(H, r)
         assert(c_poly.coeffs[0] == (pow(G, f.coeffs[0], P) * pow(H, r.coeffs[0], P)) % P)
-        zkp_proof = self._generate_zkp(packed_vote, r.coeffs[0], c_poly.coeffs[0])
+        zkp = self._generate_zkp(packed_vote, r.coeffs[0], c_poly.coeffs[0])
 
-        encoded_vote = pickle.dumps((c_poly, zkp_proof), protocol=5)
+        encoded_vote = pickle.dumps((c_poly, zkp), protocol=5)
         sig = self.__sign(encoded_vote)
         self._b.submit_vote(self.id, encoded_vote, sig)
         
