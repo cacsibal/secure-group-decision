@@ -13,10 +13,10 @@
     devShells.${system}.default = pkgs.mkShell {
       packages = with pkgs; [
         (python3.withPackages (py-pkgs: with py-pkgs; [
-          fastecdsa
-          phe
+          cryptography
           python-lsp-server
         ]))
+        openssl
       ];
     };
   };

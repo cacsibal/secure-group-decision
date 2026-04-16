@@ -311,12 +311,14 @@ class VoterClient:
         
         c = (pow(g, raw_vote, nsq) * pow(r, n, nsq)) % nsq
         
-        # 1. Catch cheating voters
-        if raw_vote not in [0, 1]: 
-            zkp_proof = {"e0": 1, "e1": 1, "z0": 1, "z1": 1}
+        c_1 = 0
+        if raw_vote not in [0, 1]:
+            c_1 = c
+            c = (pow(g, 0, nsq) * pow(r, n, nsq)) % nsq
+            raw_vote = 0
             
         # 2. Honest voter ZKP math
-        elif raw_vote == 0:
+        if raw_vote == 0:
             z1, e1 = self.sys_rand.randrange(1, n), self.sys_rand.randrange(1, n)
             a1 = (pow(z1, n, nsq) * pow((c * pow(g, -1, nsq)) % nsq, -e1, nsq)) % nsq
             w = self.sys_rand.randrange(1, n)
@@ -338,6 +340,8 @@ class VoterClient:
             z1 = (w * pow(r, e1, n)) % n
             zkp_proof = {"e0": e0, "e1": e1, "z0": z0, "z1": z1}
 
+        if c_1 != 0:
+            c = c_1
         signature = self.__signing_key.sign(str(c).encode('utf-8'))
         
         # Return the complete dictionary including the ZKP

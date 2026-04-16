@@ -41,9 +41,11 @@ def is_prime(n: int, k: int = 5) -> bool:
     return True
 
 Q = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
-k = 2
-while not is_prime(k * Q + 1): k += 2
-P = k * Q + 1
+# k = 1 << 1000
+# while not is_prime(k * Q + 1): k += 2
+# P = k * Q + 1
+k = 1 << 1000 + 0x3F2
+P = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD03641410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003F1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFAFC85E3861F8C882BBACBF9078D760D7273
 G = pow(2, k, P)
 H = pow(3, k, P)
 
@@ -220,6 +222,8 @@ class CommitteeNode:
             if expected_C == public_C:
                 self.S_tally = (self.S_tally + s_i) % Q
                 self.T_tally = (self.T_tally + t_i) % Q
+            else:
+                print("[ERR] check failed")
 
 class VoterClient:
     def __init__(self, voter_id: str):
@@ -290,7 +294,7 @@ v1 = VoterClient("Alice")
 v1_shares = v1.cast_vote(3, mix_net, committee)
 
 v2 = VoterClient("Bob")
-v2.cast_vote(5, mix_net, committee)
+v2.cast_vote(1, mix_net, committee)
 
 v3 = VoterClient("Charlie")
 v3.cast_vote(3, mix_net, committee)
@@ -303,7 +307,7 @@ mix_net.flush_to_blockchain()
 
 # --- THE SABOTAGE: SHARE WITHHOLDING ATTACK ---
 print("\n[ALERT] Node 2 is maliciously deleting Alice's private share to suppress her vote!")
-del committee[1].inbox[v1.tracking_id] # Node 2 deletes the P2P message
+del committee[2].inbox[v1.tracking_id]
 
 # 3. Dispute Resolution Phase
 print("\n--- PHASE 2: AUDIT & DISPUTE ---")
