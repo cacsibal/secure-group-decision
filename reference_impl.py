@@ -289,16 +289,16 @@ class GroupMember:
             HASH
         )
 
-board = PublicBulletin(.8, 2)
-alice, bob, charlie, david, eve = (voters := [GroupMember(i + 1, board) for i in range(5)])
-
-alice.cast_vote(1)
-bob.cast_vote(2)
-charlie.cast_vote(1)
-david.cast_vote(1)
-eve.cast_vote(3)
-
-for voter in voters:
-    voter.submit_subtally()
-
-board.decrypt_final_vote()
+# board = PublicBulletin(.8, 2)
+# alice, bob, charlie, david, eve = (voters := [GroupMember(i + 1, board) for i in range(5)])
+#
+# alice.cast_vote(1)
+# bob.cast_vote(2)
+# charlie.cast_vote(1)
+# david.cast_vote(1)
+# eve.cast_vote(3)
+#
+# for voter in voters:
+#     voter.submit_subtally()
+#
+# board.decrypt_final_vote()
